@@ -1,5 +1,4 @@
-
-const { sequelizeModule, Sequelize, DataTypes, sequelize } = require('../index');
+const { DataTypes, sequelize } = require('../index');
 
 const Apartment = sequelize.define("Apartment", 
     {

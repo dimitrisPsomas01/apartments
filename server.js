@@ -1,48 +1,18 @@
 const User = require('./models/user');
 const Apartment = require('./models/apartment');
 const Type = require('./models/type');
-const { express, bcrypt, jwt, dotenv, Joi, sequelizeModule, Sequelize, DataTypes, sequelize } = require('./index');
+const { express, bcrypt, jwt, dotenv, Joi, sequelizeModule, Sequelize, DataTypes, sequelize, registerSchema } = require('./index');
 
 //INITIALIZATIONS
-
 const saltRounds = 10;
 var errorMessage;
 const app = express();
-const registerSchema = Joi.object(
-{
-    username: Joi.string().min(3).max(30).required(),
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).max(128).required(),
-});
 
-//CHECKING IF API IS CONNECTED WITH DATABASE
-const connectionPromise = sequelize.authenticate();
-connectionPromise.then(() => 
-{
-    console.log('Connection has been established successfully');
-});
-connectionPromise.catch((error) => 
-{
-    console.error('Unable to connect to the database: ', error);
-});
-  
-//DEFINING MODEL ASSOCIATIONS
-User.hasMany(Apartment, {foreignKey : 'userId', onDelete : "CASCADE"});
-Apartment.belongsTo(User, {foreignKey : 'userId'});
+//CREATING MODELS ACCOSSIATIONS
+require('./models');
 
-Apartment.hasMany(Type, {foreignKey : 'apartmentId', onDelete : "CASCADE"});
-Type.belongsTo(Apartment, {foreignKey : 'apartmentId'});
-
-//CREATING TABLES IN DB, IF THEY ARE NO EXIST
-sequelize.sync().then(() => 
-{
-    console.log('Models: users, apartments and types created successfully!');
-
-}).catch((error) => 
-{
-    console.error('Unable to create tables: users, apartments and types: ', error);
-});
-
+//DATABASE SETTINGS
+require('./database');
 
 //MIDDLEWARES
 app.use(express.json());
