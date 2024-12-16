@@ -1,15 +1,10 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
-const sequelizeModule = require("sequelize");
-const Joi = require('joi');
+const User = require('./models/user');
+const Apartment = require('./models/apartment');
+const Type = require('./models/type');
+const { express, bcrypt, jwt, dotenv, Joi, sequelizeModule, Sequelize, DataTypes, sequelize } = require('./index');
 
 //INITIALIZATIONS
-dotenv.config({path : './config.env'});
-const Sequelize = sequelizeModule.Sequelize;
-const DataTypes = sequelizeModule.DataTypes;
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {host : process.env.DB_HOST, dialect : 'mysql'});
+
 const saltRounds = 10;
 var errorMessage;
 const app = express();
@@ -30,115 +25,10 @@ connectionPromise.catch((error) =>
 {
     console.error('Unable to connect to the database: ', error);
 });
-
-//CREATE MODELS 
-const User = sequelize.define("User", 
-{
-    id: 
-    {   
-        type: DataTypes.INTEGER,
-        autoIncrement: true, 
-        primaryKey: true, 
-        allowNull: false,
-    },
-
-    username: 
-    {
-        type: DataTypes.STRING,
-        allowNull: false, 
-        unique: true,
-    },
-
-    email: 
-    {
-        type: DataTypes.STRING, 
-        allowNull: false,
-        unique: true,
-        validate: 
-        {
-            isEmail: true, 
-        }
-    },
-
-    password: 
-    {
-        type: DataTypes.STRING, 
-        allowNull: false,
-    }
-});
   
-const Apartment = sequelize.define("Apartment", 
-{
-    id: 
-    {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false,
-    },
-
-    picture: 
-    {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
-    address: 
-    {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
-    area: 
-    {
-        type: DataTypes.FLOAT, 
-        allowNull: false,
-    },
-
-    price: 
-    {
-        type: DataTypes.FLOAT,
-        allowNull: false,
-    },
-
-    userId: 
-    { 
-        type: DataTypes.INTEGER,
-        allowNull: false, 
-    }
-});
-
+//DEFINING MODEL ASSOCIATIONS
 User.hasMany(Apartment, {foreignKey : 'userId', onDelete : "CASCADE"});
 Apartment.belongsTo(User, {foreignKey : 'userId'});
-
-const Type = sequelize.define("Type", 
-{
-    id: 
-    {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false,
-    },
-
-    type: 
-    {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-
-    count: 
-    {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-
-    apartmentId: 
-    { 
-        type: DataTypes.INTEGER,
-        allowNull: false
-    } 
-});
 
 Apartment.hasMany(Type, {foreignKey : 'apartmentId', onDelete : "CASCADE"});
 Type.belongsTo(Apartment, {foreignKey : 'apartmentId'});
