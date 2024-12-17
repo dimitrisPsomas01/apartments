@@ -1,44 +1,44 @@
 const { DataTypes, sequelize } = require('../index');
 
 const Apartment = sequelize.define("Apartment", 
+{
+    id: 
     {
-        id: 
-        {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-            allowNull: false,
-        },
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+    },
     
-        picture: 
-        {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+    picture: 
+    {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+
+    address: 
+    {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
     
-        address: 
-        {
-            type: DataTypes.STRING,
-            allowNull: false,
-        },
+    area: 
+    {
+        type: DataTypes.FLOAT, 
+        allowNull: false,
+    },
     
-        area: 
-        {
-            type: DataTypes.FLOAT, 
-            allowNull: false,
-        },
+    price: 
+    {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
     
-        price: 
-        {
-            type: DataTypes.FLOAT,
-            allowNull: false,
-        },
-    
-        userId: 
-        { 
-            type: DataTypes.INTEGER,
-            allowNull: false, 
-        }
+    userId: 
+    { 
+        type: DataTypes.INTEGER,
+        allowNull: false, 
+    }
 });
 
 module.exports = Apartment;

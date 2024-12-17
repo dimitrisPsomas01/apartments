@@ -1,8 +1,16 @@
-const User = require('./user');
-const Apartment = require('./apartment');
-const Type = require('./type');
+const { DataTypes, sequelize } = require('../index');
+const User = require('../models/user');
+const Apartment = require('../models/apartment');
+const Type = require('../models/type');    
 
-Type.belongsTo(Apartment, {foreignKey : 'apartmentId'});
+User.hasMany(Apartment, {foreignKey : 'userId', onDelete : "CASCADE"});
 Apartment.belongsTo(User, {foreignKey : 'userId'});
 Apartment.hasMany(Type, {foreignKey : 'apartmentId', onDelete : "CASCADE"});
-User.hasMany(Apartment, {foreignKey : 'userId', onDelete : "CASCADE"});
+Type.belongsTo(Apartment, {foreignKey : 'apartmentId'});
+
+module.exports = 
+{
+    User,
+    Apartment,
+    Type
+};
